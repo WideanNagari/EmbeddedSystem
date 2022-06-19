@@ -1,0 +1,24 @@
+{
+  "name": "EmbeddedSystems",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "autoprefixer": "^10.4.7",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.8",
+    "express": "^4.17.3",
+    "mysql": "^2.18.1",
+    "path": "^0.12.7",
+    "postcss": "^8.4.14",
+    "postcss-cli": "^9.1.0",
+    "tailwindcss": "^3.1.3"
+  }
+}
