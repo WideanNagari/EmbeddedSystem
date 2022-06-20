@@ -1,6 +1,29 @@
 const express = require("express");
 const router = express.Router();
 const mysql = require("mysql");
+const mqtt = require('mqtt')
+
+const client = mqtt.connect('mqtt://51.79.161.0')
+//handle errors
+client.on("error",function(error){
+    console.log("Can't connect" + error);
+    process.exit(1)
+});
+
+client.on('connect', function () {
+    client.subscribe('THWidean',{qos:1})
+})
+
+//handle incoming messages
+client.on('message', async (topic, message, packet) => {
+    // console.log("["+topic+"]: "+ message);
+    try{
+        let data = message.toString().split(",")
+        let dataInsert = await executeQuery(`INSERT INTO activity VALUES(sysdate(), ${data[0]}, ${data[1]})`)
+    }catch (err){
+        console.log(err)
+    }
+})
 // const pool = mysql.createPool({
 //     host: "51.79.161.0",
 //     database: "adiputro_psytest",
@@ -37,27 +60,9 @@ function executeQuery(q){
     });
 }
 
-// router.get("/", async (req, res) => {
-//     // if(!req.body.username)
-//     //     return res.status(400).send({"message":"Field tidak sesuai ketentuan!"})
-
-//     // try{
-//     //     let user = await executeQuery(`SELECT * FROM users WHERE username = '${username}%'`)
-//     //     if(user.length > 0)
-//     //         return res.status(400).send({"message":"Username sudah ada!"})
-        
-//     //     let newUser = await executeQuery(`insert into users values('${username}','${nama}','${tanggal}','${jenis_kelamin}','${hobi}')`)
-        
-//     //     let now = await executeQuery(`SELECT * FROM users WHERE username = '${username}%'`)
-        
-//     //     return res.status(200).send(now[0])
-//     return res.status(200).send({"msg" : "Success"})
-//     // }catch (err){
-//     //     return res.status(500).send(err)
-//     // }
-// })
-
 router.get("/", async (req, res) => {
+    // client.publish('THWidean', '10,20')
+    // return res.status(200).send("a")
     try{
         let data = await executeQuery(`SELECT * FROM activity order by time desc`)
         return res.status(200).send(data)

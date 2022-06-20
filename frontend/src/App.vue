@@ -68,7 +68,7 @@ export default {
         this.timerWaktu = setInterval(() => {
             this.getNow()
             this.counter++
-            if (this.counter>9){
+            if (this.counter>4){
                 this.refresh()
                 this.counter = 0
             }
